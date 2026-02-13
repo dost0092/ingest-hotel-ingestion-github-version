@@ -13,6 +13,7 @@ from utils.context_hashing import generate_raw_content_hash
 from utils.address_parser import parse_address
 from scraping.hyatt_scraper import HyattScraper
 from utils.support_functions import detect_hotel_chain_from_url
+from scraping.marriot_scraper import MarriottScraper
 
 logger = logging.getLogger(__name__)
 
@@ -63,6 +64,11 @@ class HotelExtractionPipeline:
                 self.scraper = HiltonScraper(headless=True)
             elif chain == "hyatt":
                 self.scraper = HyattScraper(headless=True)
+            elif chain == "marriott":
+                self.scraper = MarriottScraper(headless=True)
+            elif chain == "wyndham":
+                from scraping.wyndham_scraper import WyndhamScraper
+                self.scraper = WyndhamScraper(headless=True)
             else:
                 raise ValueError(f"Unsupported hotel chain detected: {chain}")
 

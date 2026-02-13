@@ -34,6 +34,7 @@ from url.hilton_location_scraper import HiltonLocationsScraper
 from url.hyatt_location_scraper import HyattPetFriendlyScraper
 from scraping.hilton_scraper import HiltonScraper
 from scraping.hyatt_scraper import HyattScraper
+from scraping.marriot_scraper import MarriottScraper
 from utils.support_functions import detect_hotel_chain_from_url
 
 # Optional modular imports
@@ -98,15 +99,14 @@ def run_scraper_task(hotel_chain: str, country_code: Optional[str], session_id: 
             "type": "location_scrape"
         }
 
-        if hotel_chain == "hilton":
+        if hotel_chain == "hilton" or hotel_chain == "Hilton":
             scraper = HiltonLocationsScraper()
             stats = scraper.scrape_all_locations(country_code_filter=country_code)
 
-        elif hotel_chain == "hyatt":
+        elif hotel_chain == "hyatt" or hotel_chain == "Hyatt":
             scraper = HyattPetFriendlyScraper()
             scraper.scrape()
             stats = {"message": "Hyatt scrape completed"}
-
         else:
             raise ValueError("Unsupported hotel chain")
 
@@ -149,6 +149,8 @@ def run_hotel_extraction_task(url: str, save_to_db: bool, extract_attributes: bo
         else:
             if chain == "hilton":
                 scraper = HiltonScraper(headless=True)
+            elif chain == "marriott":
+                scraper = MarriottScraper(headless=True)
             else:
                 scraper = HyattScraper(headless=True)
 
